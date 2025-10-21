@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  name      String?
+  avatar    String?
+  password  String
+  role      String
+  createdAt DateTime @default(now())
+
+  Magazine       Magazine[]
+  PublishRequest PublishRequest[]
+  Comment        Comment[]
+  Subscription   Subscription[]
+}
+
+model Magazine {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  category    String
+  content     String
+  price       Float
+  image       String[]
+  publisherId String
+  createdAt   DateTime @default(now())
+
+  publisher      User            @relation(fields: [publisherId], references: [id])
+  publishRequest PublishRequest?
+
+  Comment      Comment[]
+  Subscription Subscription[]
+}
+
+model PublishRequest {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  magazineId    String        @unique @db.ObjectId
+  magazine      Magazine      @relation(fields: [magazineId], references: [id], onDelete: Cascade)
+  publisherId   String        @db.ObjectId
+  publisher     User          @relation(fields: [publisherId], references: [id])
+  status        RequestStatus @default(PENDING)
+  rejectionNote String?
+  createdAt     DateTime      @default(now())
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Comment {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  content    String
+  createdAt  DateTime @default(now())
+  magazineId String
+  userId     String
+
+  magazine Magazine @relation(fields: [magazineId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id])
+}
+
+model Subscription {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String
+  magazineId String
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id])
+  magazine Magazine @relation(fields: [magazineId], references: [id], onDelete: Cascade)
+}
+model ActivityLog {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  action     String   // مثال: SUBSCRIBE, REJECT, DELETE_COMMENT
+  targetId   String?  @db.ObjectId // المجلة أو التعليق أو الطلب
+  details    String?  // وصف إضافي
+  createdAt  DateTime @default(now())
+}
+
