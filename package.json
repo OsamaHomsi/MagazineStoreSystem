@@ -1,4 +1,16 @@
 {
+  "name": "magazin-apis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@fastify/cors": "^11.1.0",
     "@fastify/multipart": "^9.2.1",
@@ -29,14 +41,5 @@
     "@types/nodemailer": "^7.0.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
-  },
-  "name": "magazin-apis",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  }
 }
