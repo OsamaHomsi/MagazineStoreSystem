@@ -1,5 +1,5 @@
-import prisma from '../config/db';
-import { sendMail } from '../utils/mailer';
+import prisma from '../config/db.js';
+import { sendMail } from '../utils/mailer.js';
 
 
 const allowedStatuses = ['PENDING', 'APPROVED', 'REJECTED'] as const;

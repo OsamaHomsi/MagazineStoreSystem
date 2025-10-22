@@ -1,4 +1,4 @@
-import { listPublishRequests ,approvePublishRequest ,rejectPublishRequest,getSinglePublishRequest} from '../services/publishRequest.service';
+import { listPublishRequests ,approvePublishRequest ,rejectPublishRequest,getSinglePublishRequest} from '../services/publishRequest.service.js';
 import { FastifyRequest, FastifyReply } from 'fastify';
 
 export const getPublishRequests = async (req: FastifyRequest, reply: FastifyReply) => {

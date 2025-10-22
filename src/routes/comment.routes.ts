@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { createComment, listComments,removeComment, editComment,deleteCommentByAdmin} from '../controllers/comment.controller';
-import { verifyToken } from '../middlewares/auth';
+import { createComment, listComments,removeComment, editComment,deleteCommentByAdmin} from '../controllers/comment.controller.js';
+import { verifyToken } from '../middlewares/auth.js';
 
 export default async function commentRoutes(app: FastifyInstance) {
   app.post('/comment', { preHandler: verifyToken }, createComment);

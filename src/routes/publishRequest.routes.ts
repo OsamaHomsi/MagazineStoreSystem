@@ -3,9 +3,9 @@ import {
   approveRequest,
   rejectRequest,
   getPublishRequestById,
-} from '../controllers/publishRequest.controller';
+} from '../controllers/publishRequest.controller.js';
 import { FastifyInstance } from 'fastify';
-import { verifyToken } from '../middlewares/auth';
+import { verifyToken } from '../middlewares/auth.js';
 
 export default async function publishRequestRoutes(app: FastifyInstance) {
   app.get('/', { preHandler: verifyToken }, getPublishRequests);

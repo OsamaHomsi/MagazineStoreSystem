@@ -1,5 +1,5 @@
-import prisma from '../config/db';
-import { sendMail } from '../utils/mailer';
+import prisma from '../config/db.js';
+import { sendMail } from '../utils/mailer.js';
 
 export const subscribeToMagazine = async (userId: string, magazineId: string) => {
   if (!userId) throw new Error('User ID is missing');

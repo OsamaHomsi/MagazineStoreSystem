@@ -2,9 +2,9 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import type { MultipartFile } from '@fastify/multipart';
 import fs from 'fs';
 import path from 'path';
-import { createMagazineWithRequest ,updateMagazineIfPendingByRequestId,getMyRequests,getMyMagazines,deleteMagazineByPublisher,getMagazineById,getApprovedMagazines} from '../services/magazine.service';
-import prisma from '../config/db';
-import { logActivity } from '../services/activity.service';
+import { createMagazineWithRequest ,updateMagazineIfPendingByRequestId,getMyRequests,getMyMagazines,deleteMagazineByPublisher,getMagazineById,getApprovedMagazines} from '../services/magazine.service.js';
+import prisma from '../config/db.js';
+import { logActivity } from '../services/activity.service.js';
 
 type CustomMultipartValue = {
   fieldname: string;

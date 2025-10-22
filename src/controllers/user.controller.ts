@@ -1,11 +1,11 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { createUser, validateUser } from '../services/user.service';
+import { createUser, validateUser } from '../services/user.service.js';
 import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import type { MultipartFile } from '@fastify/multipart';
-import prisma from '../config/db'; 
-import { hashPassword } from '../utils/hash';
+import prisma from '../config/db.js'; 
+import { hashPassword } from '../utils/hash.js';
 
 type CustomMultipartValue = {
   fieldname: string;

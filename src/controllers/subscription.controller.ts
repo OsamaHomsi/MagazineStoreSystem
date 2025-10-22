@@ -1,7 +1,7 @@
-import { subscribeToMagazine, unsubscribeFromMagazine } from '../services/subscription.service';
+import { subscribeToMagazine, unsubscribeFromMagazine } from '../services/subscription.service.js';
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { logActivity } from '../services/activity.service';
-import prisma from '../config/db';
+import { logActivity } from '../services/activity.service.js';
+import prisma from '../config/db.js';
 
 export const createSubscription = async (req: FastifyRequest, reply: FastifyReply) => {
   try {

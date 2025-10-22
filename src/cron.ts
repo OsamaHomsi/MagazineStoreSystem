@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import prisma from './config/db';
+import prisma from './config/db.js';
 import nodemailer from 'nodemailer';
 
 export const startCronJobs = () => {

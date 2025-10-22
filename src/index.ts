@@ -1,8 +1,9 @@
 import Fastify, { FastifyRequest, FastifyReply } from 'fastify';
 import cors from '@fastify/cors';
-import app from './app';
-import { logActivity } from './services/activity.service';
-import { startCronJobs } from './cron';
+import app from './app.js';
+import { logActivity } from './services/activity.service.js';
+import { startCronJobs } from './cron.js';
+
 
 const server = Fastify({ logger: true });
 

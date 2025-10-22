@@ -1,10 +1,10 @@
 import { FastifyInstance } from 'fastify';
-import userRoutes from './routes/user.routes';
 import fastifyMultipart from '@fastify/multipart';
-import magazineRoutes from './routes/magazine.routes';
-import commentRoutes from './routes/comment.routes';
-import subscriptionRoutes from './routes/subscription.routes';
-import publishRequestRoutes from './routes/publishRequest.routes';
+import userRoutes from './routes/user.routes.js';
+import magazineRoutes from './routes/magazine.routes.js';
+import commentRoutes from './routes/comment.routes.js';
+import subscriptionRoutes from './routes/subscription.routes.js';
+import publishRequestRoutes from './routes/publishRequest.routes.js';
 
 export default async function app(fastify: FastifyInstance) {
   fastify.register(fastifyMultipart);

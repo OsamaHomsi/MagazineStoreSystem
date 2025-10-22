@@ -4,8 +4,8 @@ import {
   getCommentsForMagazine,
   deleteComment,
   updateComment,
-} from '../services/comment.service';
-import prisma from '../config/db';
+} from '../services/comment.service.js';
+import prisma from '../config/db.js';
 
 export const createComment = async (req: FastifyRequest, reply: FastifyReply) => {
   try {

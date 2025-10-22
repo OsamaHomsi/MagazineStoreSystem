@@ -1,5 +1,5 @@
-import prisma from '../config/db';
-import { hashPassword, comparePassword } from '../utils/hash';
+import prisma from '../config/db.js';
+import { hashPassword, comparePassword } from '../utils/hash.js';
 
 export const createUser = async (
   email: string,

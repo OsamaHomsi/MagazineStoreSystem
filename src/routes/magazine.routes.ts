@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { submitMagazine,updateMagazine ,listMyRequests,listMyMagazines,deleteMagazine,getMagazineDetails,listApprovedMagazines,deleteMagazineByAdmin,listSubscriberIdsForMagazine} from '../controllers/magazine.controller';
-import { verifyToken } from '../middlewares/auth';
+import { submitMagazine,updateMagazine ,listMyRequests,listMyMagazines,deleteMagazine,getMagazineDetails,listApprovedMagazines,deleteMagazineByAdmin,listSubscriberIdsForMagazine} from '../controllers/magazine.controller.js';
+import { verifyToken } from '../middlewares/auth.js';
 
 export default async function magazineRoutes(app: FastifyInstance) {
   app.post('/submit', { preHandler: verifyToken }, submitMagazine);

@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { registerUser, loginUser, getProfile,updateUser,getPublicUserProfile } from '../controllers/user.controller';
-import { verifyToken } from '../middlewares/auth';
+import { registerUser, loginUser, getProfile,updateUser,getPublicUserProfile } from '../controllers/user.controller.js';
+import { verifyToken } from '../middlewares/auth.js';
 
 export default async function userRoutes(app: FastifyInstance) {
   app.post('/signUp', registerUser);
