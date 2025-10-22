@@ -1,14 +1,18 @@
 {
   "name": "magazin-apis",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend API for Magazine Store System using Fastify, TypeScript, and Prisma",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
+    "postinstall": "prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=20.0.0 <=20.99.99"
   },
   "dependencies": {
     "@fastify/cors": "^11.1.0",
