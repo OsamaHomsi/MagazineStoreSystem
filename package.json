@@ -5,13 +5,13 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts",
-    "postinstall": "prisma generate",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "npm install --legacy-peer-deps"
-  },
+  "build": "tsc",
+  "start": "node dist/index.js",
+  "dev": "ts-node src/index.ts",
+  "postinstall": "prisma generate",
+  "test": "echo \"Error: no test specified\" && exit 1"
+}
+,
   "engines": {
     "node": ">=20.0.0 <=20.99.99"
   },
