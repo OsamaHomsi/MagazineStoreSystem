@@ -30,6 +30,7 @@ export const createMagazineWithRequest = async (
   return { magazine, request };
 };
 
+
 export const updateMagazineIfPendingByRequestId = async (
   requestId: string,
   publisherId: string,

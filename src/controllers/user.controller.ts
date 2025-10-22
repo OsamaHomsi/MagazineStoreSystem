@@ -2,6 +2,8 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { createUser, validateUser } from '../services/user.service.js';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import jwt from 'jsonwebtoken';
 import type { MultipartFile } from '@fastify/multipart';
 import prisma from '../config/db.js'; 
@@ -29,42 +31,51 @@ const ALLOWED_MIMES = [
 'image/heic',
 'image/heif',
 ];
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-export const registerUser = async (req: FastifyRequest, reply: FastifyReply) => {
-try {
-    const parts = req.parts() as AsyncIterableIterator<MultipartFile | CustomMultipartValue>;
+export const registerUser = async (
+  req: import('fastify').FastifyRequest,
+  reply: import('fastify').FastifyReply
+) => {
+  try {
+    const parts = req.parts();
 
     let email = '';
     let password = '';
-    let role: 'admin' | 'publisher' | 'subscriber' = 'subscriber';
-    let name: string | undefined;
-    let avatarFilename: string | undefined;
+    let role = 'subscriber';
+    let name;
+    let avatarFilename;
 
     for await (const part of parts) {
-    if (isFilePart(part)) {
-        if (!ALLOWED_MIMES.includes(part.mimetype)) {
-        part.file.resume();
-        return reply.code(400).send({ error: 'Unsupported image type' });
+      if ((part as any).file) {
+        if (!ALLOWED_MIMES.includes((part as any).mimetype)) {
+          (part as any).file.resume();
+          return reply.code(400).send({ error: 'Unsupported image type' });
         }
 
-        const buffer = await part.toBuffer();
-        const uploadPath = path.join(__dirname, '../../uploads', part.filename);
-        fs.writeFileSync(uploadPath, buffer);
-        avatarFilename = part.filename;
-    } else if (isValuePart(part)) {
-        if (part.fieldname === 'email') email = part.value;
-        if (part.fieldname === 'password') password = part.value;
-        if (part.fieldname === 'role') {
-        const value = part.value.toLowerCase();
-         if (value === 'publisher') {
-         role = 'publisher';
-         } else {
-        role = 'subscriber'; 
-  }
-}
+        const buffer = await (part as any).toBuffer();
+        const uploadDir = path.join(__dirname, '../../uploads');
 
-        if (part.fieldname === 'name') name = part.value;
-    }
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        const uploadPath = path.join(uploadDir, (part as any).filename);
+        fs.writeFileSync(uploadPath, buffer);
+        avatarFilename = (part as any).filename;
+      } else {
+        const fieldname = (part as any).fieldname;
+        const value = (part as any).value;
+
+        if (fieldname === 'email') email = value;
+        if (fieldname === 'password') password = value;
+        if (fieldname === 'role') {
+          const lower = value.toLowerCase();
+          role = lower === 'publisher' ? 'publisher' : 'subscriber';
+        }
+        if (fieldname === 'name') name = value;
+      }
     }
 
     const user = await createUser(email, password, role, name, avatarFilename);
@@ -88,6 +99,7 @@ try {
     reply.code(500).send({ error: 'Registration failed', details: error });
   }
 };
+
 
 export const loginUser = async (req: FastifyRequest, reply: FastifyReply) => {
   try {

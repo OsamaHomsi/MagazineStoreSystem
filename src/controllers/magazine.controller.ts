@@ -2,6 +2,8 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import type { MultipartFile } from '@fastify/multipart';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import { createMagazineWithRequest ,updateMagazineIfPendingByRequestId,getMyRequests,getMyMagazines,deleteMagazineByPublisher,getMagazineById,getApprovedMagazines} from '../services/magazine.service.js';
 import prisma from '../config/db.js';
 import { logActivity } from '../services/activity.service.js';
@@ -19,7 +21,13 @@ function isValuePart(part: MultipartFile | CustomMultipartValue): part is Custom
   return 'value' in part && 'fieldname' in part;
 }
 
-export const submitMagazine = async (req: FastifyRequest, reply: FastifyReply) => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export const submitMagazine = async (
+  req: import('fastify').FastifyRequest,
+  reply: import('fastify').FastifyReply
+) => {
   try {
     const userId = (req as any).user?.id;
     const role = (req as any).role;
@@ -28,7 +36,7 @@ export const submitMagazine = async (req: FastifyRequest, reply: FastifyReply) =
       return reply.code(403).send({ error: 'Access denied: Publishers only' });
     }
 
-    const parts = req.parts() as AsyncIterableIterator<MultipartFile | CustomMultipartValue>;
+    const parts = req.parts();
 
     let title = '';
     let category = '';
@@ -40,9 +48,15 @@ export const submitMagazine = async (req: FastifyRequest, reply: FastifyReply) =
       if ((part as any).file) {
         const buffer = await (part as any).toBuffer();
         const fileName = `${Date.now()}-${(part as any).filename}`;
-        const filePath = require('path').join('uploads', fileName);
-        await require('fs').promises.writeFile(filePath, buffer);
-        imagePaths.push(filePath);
+        const uploadDir = path.join(__dirname, '../../uploads');
+
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        const filePath = path.join(uploadDir, fileName);
+        await fs.promises.writeFile(filePath, buffer);
+        imagePaths.push(`/uploads/${fileName}`);
       } else {
         const fieldname = (part as any).fieldname;
         const value = (part as any).value;
@@ -61,7 +75,7 @@ export const submitMagazine = async (req: FastifyRequest, reply: FastifyReply) =
       imagePaths,
       userId
     );
-
+    
     await logActivity(
       userId,
       'SUBMIT_PUBLISH_REQUEST',
@@ -78,6 +92,8 @@ export const submitMagazine = async (req: FastifyRequest, reply: FastifyReply) =
     reply.code(500).send({ error: 'Failed to submit magazine', details: error });
   }
 };
+
+
 
 
 export const updateMagazine = async (req: FastifyRequest, reply: FastifyReply) => {
